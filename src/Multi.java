@@ -14,22 +14,22 @@ public class Multi extends JFrame implements ActionListener {
 		
 		getContentPane().setLayout(new BorderLayout());
 		
-		Prime prime = new Prime();
-		Painting paint = new Painting();
+		Prime prime = new Prime(); 
+		Painting paint = new Painting(); //adds prime counter and painting to enable adding to main frame
 		
 		quit = new JButton("Quit");
 		quit.addActionListener(this);
-		quit.setAlignmentX(Component.CENTER_ALIGNMENT);
+		quit.setAlignmentX(Component.CENTER_ALIGNMENT); //quit button
 		
 		JPanel down = new JPanel();
 		down.setLayout(new BoxLayout(down, BoxLayout.PAGE_AXIS));
 
 		down.add(prime);
-		down.add(quit);
+		down.add(quit); 
 		
 		getContentPane().add(down, BorderLayout.SOUTH);
 		getContentPane().add(paint, BorderLayout.CENTER);
-
+		//adds everything to main frame
 		}
 	
 	
@@ -37,7 +37,7 @@ public class Multi extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource()==quit) {
 			System.exit(0);
-		}
+		} //system exit if quit button pressed
 	}
 	
 

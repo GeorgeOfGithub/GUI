@@ -41,7 +41,9 @@ public class TTT extends JFrame implements ActionListener {
         JScrollPane scrollpane = new JScrollPane(txtarea);
         getContentPane().add(scrollpane, BorderLayout.SOUTH);
 		
-        try {
+		//adds 3x3 grid with textfield with scrollpane underneath 
+
+        try { //opens socket to connect to server
         	
     		sock = new Socket("ftnk-ctek01.win.dtu.dk", 1060);
     		bir = new BufferedReader(new InputStreamReader(sock.getInputStream()));
@@ -51,18 +53,18 @@ public class TTT extends JFrame implements ActionListener {
     		System.out.println("Could not connect to server");
     	}
         
-        try {
+        try { //reads first line sent from server to determine who is playing X
     		textline = bir.readLine();	
     		if (textline.endsWith("X")) {
     			isx = true;
     		}
-    		txtarea.append(textline + "\n");
+    		txtarea.append(textline + "\n"); //tells the player welcome and who player is.
     		
-    		recieve();
+    		recieve(); //a single bir.readline with try catch around it.
     		
-    		board();
+    		board(); // creates array for placing board
 			
-			recieve();
+			recieve(); //single bir.readline
         } catch (IOException board) {
         	System.out.println("Could not get board");
         }
@@ -73,7 +75,8 @@ public class TTT extends JFrame implements ActionListener {
 			btns[i].addActionListener(this);
 			btns[i].setFont(new Font("Arial", Font.BOLD, 30));
 			p1.add(btns[i]);
-		}
+		} //this gives the buttons a digit according to server information
+		//also makes larger and places on grid panel p1
 		
 		
 
@@ -83,29 +86,30 @@ public class TTT extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		for (int i = 0; i < 9; i++) {
 			
-            if (e.getSource() == btns[i]) {
-            	if (btns[i].getText() != "X" && btns[i].getText() != "O") {
+            if (e.getSource() == btns[i]) { //if a button is pressed it places either X or O 
+            	if (btns[i].getText() != "X" && btns[i].getText() != "O") { //according to what player is
             		if (isx) {	
                     	btns[i].setText("X");
             		} else {
             			btns[i].setText("O");
             		}
             	}
-				pw.print(i+1 + "\r\n");
-				pw.flush();		
-				recieve();					
-				board();
+				pw.print(i+1 + "\r\n"); //sends which button is pressed to server
+				//for some reason it thinks the button is one lower than what it is, so output is +1
+				pw.flush();	//flushes to server	
+				recieve();	//answer back				
+				board(); //updates board
     			if (arr[1].equals("V")) {
     				recieve();
     			} else {
     				for (int g = 0; g <= 8; g++) {
     				btns[g].setText(arr[g]);}
     				recieve();
-                }
+                } //changes buttons
     			
                 if (textline.endsWith("WINS")) {
                 	gameover(textline);
-                }
+                } //if message with who won is received from server
             }
 
 		}
@@ -127,19 +131,17 @@ public class TTT extends JFrame implements ActionListener {
 	}
 
 	public void gameover(String s) {
-			JOptionPane.showMessageDialog(null, s);
+			JOptionPane.showMessageDialog(null, s); //shows message with who won in popup to player
 			for (int i = 0; i<9; i++) {
 				btns[i].setText(".");
-			}
-			this.dispose();
-			main(null);
+			} //resets board
+			this.dispose(); //ends game and closes window
+			main(null); //starts game again with main
 	}
 
 	public static void main(String[] args) {
 	
 		TTT ttt = new TTT();
-	
-	
 		ttt.setTitle("Tic-Tac-Toe"); 
 		ttt.setSize(500, 500);     
 		ttt.setResizable(false);    
